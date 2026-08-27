@@ -1,19 +1,21 @@
 /**
- * Cloudflare Pages Function: POST /submit
+ * Cloudflare Worker (with static assets) entry point for the TRARC
+ * membership form. Handles POST /submit itself; everything else falls
+ * through to the static files in cloudflare/ via the ASSETS binding.
  *
- * JS port of submit.php for deployment on Cloudflare Pages (no PHP runtime
- * available there). Same fields, same validation, same email content as the
- * IONOS/PHP version, but sends mail via the Resend HTTP API instead of SMTP
- * (Workers can't open raw SMTP sockets).
+ * This is a JS port of submit.php for deployment where PHP isn't
+ * available. Same fields, same validation, same email content as the
+ * IONOS/PHP version, but sends mail via the Resend HTTP API instead of
+ * SMTP (Workers can't open raw SMTP sockets).
  *
- * Required environment variables (set as Cloudflare Pages secrets):
+ * Required environment variables (set as Cloudflare Worker secrets/vars):
  *   RESEND_API_KEY              - Resend API key
  *   FROM_EMAIL                  - verified sending address, e.g. noreply@yourclub.org
  *   FROM_NAME                   - optional, defaults to "TRARC Membership Application"
  *   BOARD_RECIPIENTS            - comma-separated board email addresses
  *   SEND_APPLICANT_CONFIRMATION - "true" to also email applicants a confirmation
  */
-import { renderFormPage, renderMessage, buildEmailBodies, cleanHeaderValue } from './_shared.js';
+import { renderFormPage, renderMessage, buildEmailBodies, cleanHeaderValue } from './shared.js';
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -46,7 +48,7 @@ async function sendEmail(env, { to, subject, html, text, replyTo }) {
   }
 }
 
-export async function onRequestPost({ request, env }) {
+async function handleSubmit(request, env) {
   const form = await request.formData();
   const field = (key) => String(form.get(key) ?? '').trim();
 
@@ -190,6 +192,17 @@ export async function onRequestPost({ request, env }) {
   );
 }
 
-export async function onRequestGet() {
-  return Response.redirect('/', 302);
-}
+export default {
+  async fetch(request, env) {
+    const url = new URL(request.url);
+
+    if (url.pathname === '/submit') {
+      if (request.method === 'POST') {
+        return handleSubmit(request, env);
+      }
+      return Response.redirect(url.origin + '/', 302);
+    }
+
+    return env.ASSETS.fetch(request);
+  },
+};

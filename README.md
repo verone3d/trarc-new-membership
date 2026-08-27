@@ -14,8 +14,10 @@ There are two parallel deployment targets sharing the same fields/validation/
 email content, for use depending on which hosting is available:
 
 - **IONOS (PHP + SMTP)** — `index.php`, `submit.php`, `config.php`, `lib/PHPMailer/`.
-- **Cloudflare Pages (GitHub-connected, no PHP)** — `cloudflare/index.html`,
-  `functions/submit.js`, sending mail via the Resend HTTP API instead of SMTP.
+- **Cloudflare Workers (GitHub-connected, no PHP)** — a Worker with static
+  assets: `cloudflare/index.html` is served as a static file, and
+  `src/worker.js` handles `POST /submit`, sending mail via the Resend HTTP
+  API instead of SMTP.
 
 Only one needs to be live at a time; keeping both in the repo means switching
 hosts later is a redeploy, not a rewrite.
@@ -35,15 +37,16 @@ lib/PHPMailer/            IONOS: vendored PHPMailer source (PHPMailer.php, SMTP.
 includes/.htaccess        IONOS: denies direct web access to includes/
 lib/.htaccess             IONOS: denies direct web access to lib/
 
-cloudflare/index.html    Cloudflare Pages: static form page (Pages build output directory)
-cloudflare/style.css     Cloudflare Pages: copy of style.css
-functions/submit.js      Cloudflare Pages Function: handles POST /submit
-functions/_shared.js     Cloudflare Pages Function: shared HTML/email-body rendering
-wrangler.toml             Cloudflare Pages project config (build output dir, compat date)
-.dev.vars.example        Template for local `wrangler pages dev` secrets (copy to .dev.vars)
+cloudflare/index.html    Cloudflare Worker: static form page (served via the assets binding)
+cloudflare/style.css     Cloudflare Worker: copy of style.css
+src/worker.js             Cloudflare Worker: fetch handler — routes POST /submit itself,
+                           everything else falls through to the assets binding
+src/shared.js             Cloudflare Worker: shared HTML/email-body rendering
+wrangler.toml             Cloudflare Worker config (entry point, assets directory, compat date)
+.dev.vars.example        Template for local `wrangler dev` secrets (copy to .dev.vars)
 ```
 
-## Deployment on Cloudflare Pages (GitHub-connected)
+## Deployment on Cloudflare Workers (GitHub-connected)
 
 Use this path if you don't currently have IONOS hosting access but do have
 GitHub + Cloudflare.
@@ -51,16 +54,18 @@ GitHub + Cloudflare.
 1. Push this repo to GitHub (`git init`, commit, `gh repo create` or create
    the repo on github.com, then push). `config.php` and `.dev.vars` are
    git-ignored so no real secrets end up in the repo.
-2. In the Cloudflare dashboard: **Workers & Pages → Create → Pages → Connect
-   to Git**, pick the GitHub repo.
-3. Project settings:
-   - Framework preset: **None**
-   - Build command: *(leave empty)*
-   - Build output directory: `cloudflare`
-   - Cloudflare auto-detects the top-level `functions/` directory and deploys
-     `functions/submit.js` as a Pages Function handling `POST /submit`.
-4. Set these as **environment variables/secrets** on the Pages project
-   (Settings → Environment variables, for both Production and Preview):
+2. In the Cloudflare dashboard: **Compute (Workers) → Create → Connect to
+   Git**, pick the GitHub repo. Cloudflare reads `wrangler.toml` for the
+   entry point (`src/worker.js`) and static assets directory (`cloudflare/`)
+   automatically — no separate build command needed, since `wrangler.toml`
+   already sets `main` and `[assets]`.
+   - If the dashboard shows a "Deploy command" field, it should be
+     `npx wrangler deploy`. (An earlier attempt at this used the older,
+     separate "Pages" product with a `pages_build_output_dir` setting —
+     that's been superseded by Workers' built-in static assets support,
+     which is what `wrangler.toml` is now configured for.)
+3. Set these as **environment variables/secrets** on the Worker project
+   (Settings → Variables and Secrets, for both Production and Preview):
    - `RESEND_API_KEY` — API key from [resend.com](https://resend.com) (free
      tier: ~3,000 emails/month, more than enough for a club form)
    - `FROM_EMAIL` — sending address on a domain verified in Resend
@@ -68,15 +73,15 @@ GitHub + Cloudflare.
    - `BOARD_RECIPIENTS` — comma-separated board email address(es)
    - `SEND_APPLICANT_CONFIRMATION` — `true` to also email applicants a short
      confirmation
-5. Deploy. Cloudflare rebuilds automatically on every push to the connected
+4. Deploy. Cloudflare rebuilds automatically on every push to the connected
    branch.
-6. In Resend, verify the sending domain (DNS records Resend gives you) before
+5. In Resend, verify the sending domain (DNS records Resend gives you) before
    `FROM_EMAIL` will actually deliver — unverified domains get rejected or
    land in spam.
-7. Test locally first if you want: `npx wrangler pages dev cloudflare` (copy
+6. Test locally first if you want: `npx wrangler dev` (copy
    `.dev.vars.example` to `.dev.vars` and fill in real values — it's
    git-ignored).
-8. Test the full flow end-to-end after deploy, same checklist as the IONOS
+7. Test the full flow end-to-end after deploy, same checklist as the IONOS
    steps below (valid submit, missing required fields, under-18 branch,
    confirm the board actually receives the email).
 
@@ -86,10 +91,10 @@ No code changes needed — `index.php`/`submit.php`/`config.php`/`lib/PHPMailer/
 were never touched by the Cloudflare setup. When IONOS access is available:
 
 1. Follow the "Deployment on IONOS shared hosting" steps below as normal.
-2. You don't need to upload `cloudflare/`, `functions/`, or `wrangler.toml` to
+2. You don't need to upload `cloudflare/`, `src/`, or `wrangler.toml` to
    IONOS — they're inert there, but there's no harm leaving them out.
-3. Point the domain/DNS at IONOS instead of Cloudflare Pages (or keep both
-   live at different subdomains/paths if useful during a transition).
+3. Point the domain/DNS at IONOS instead of Cloudflare (or keep both live at
+   different subdomains/paths if useful during a transition).
 
 ## Deployment on IONOS shared hosting
 
