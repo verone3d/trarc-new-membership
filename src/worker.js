@@ -49,7 +49,12 @@ async function sendEmail(env, { to, subject, html, text, replyTo }) {
 }
 
 async function handleSubmit(request, env) {
-  const form = await request.formData();
+  let form;
+  try {
+    form = await request.formData();
+  } catch (err) {
+    return htmlResponse(renderFormPage({}, {}), 400);
+  }
   const field = (key) => String(form.get(key) ?? '').trim();
 
   // --- Honeypot -------------------------------------------------------------
