@@ -1,0 +1,9 @@
+# Copy to .dev.vars for local `wrangler pages dev` testing.
+# In production, set these as Cloudflare Pages secrets instead
+# (Pages project > Settings > Environment variables) — never commit real values.
+
+RESEND_API_KEY=re_CHANGE_ME
+FROM_EMAIL=CHANGE_ME@yourclubdomain.org
+FROM_NAME=TRARC Membership Application
+BOARD_RECIPIENTS=CHANGE_ME_board@yourclubdomain.org
+SEND_APPLICANT_CONFIRMATION=true

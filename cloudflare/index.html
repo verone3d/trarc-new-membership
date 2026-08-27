@@ -1,0 +1,278 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TRARC Membership Application</title>
+<link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<div class="page">
+    <header class="page-header">
+        <h1>Two Rivers Amateur Radio Club of McKeesport, PA</h1>
+        <h2>Membership Application</h2>
+        <p class="required-note">Please fill in the required (*) fields for membership.</p>
+    </header>
+
+    <form action="/submit" method="post" novalidate>
+
+        <!-- Honeypot: real users never see or fill this in. -->
+        <div class="hp-field" aria-hidden="true">
+            <label for="website">Website</label>
+            <input type="text" id="website" name="website" tabindex="-1" autocomplete="off" value="">
+        </div>
+
+        <fieldset>
+            <legend>Contact Info</legend>
+
+            <div class="form-row two-col">
+                <div class="field">
+                    <label for="name">Name *</label>
+                    <input type="text" id="name" name="name" value="" required>
+                </div>
+                <div class="field">
+                    <label for="callsign">Call Sign *</label>
+                    <input type="text" id="callsign" name="callsign" value="" required>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="field">
+                    <label for="address">Address *</label>
+                    <input type="text" id="address" name="address" value="" required>
+                </div>
+            </div>
+
+            <div class="form-row three-col">
+                <div class="field">
+                    <label for="city">City *</label>
+                    <input type="text" id="city" name="city" value="" required>
+                </div>
+                <div class="field">
+                    <label for="state">State *</label>
+                    <input type="text" id="state" name="state" maxlength="20" value="" required>
+                </div>
+                <div class="field">
+                    <label for="zip">Zip Code *</label>
+                    <input type="text" id="zip" name="zip" pattern="^\d{5}(-\d{4})?$" title="5-digit US zip, optionally with a 4-digit extension" value="" required>
+                </div>
+            </div>
+
+            <div class="form-row three-col">
+                <div class="field">
+                    <label for="home_phone">Home Phone</label>
+                    <input type="tel" id="home_phone" name="home_phone" value="">
+                </div>
+                <div class="field">
+                    <label for="work_phone">Work Phone</label>
+                    <input type="tel" id="work_phone" name="work_phone" value="">
+                </div>
+                <div class="field">
+                    <label for="cell_phone">Cell Phone</label>
+                    <input type="tel" id="cell_phone" name="cell_phone" value="">
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="field">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" value="">
+                </div>
+            </div>
+        </fieldset>
+
+        <fieldset>
+            <legend>License &amp; Membership Type</legend>
+
+            <div class="form-row three-col">
+                <div class="field">
+                    <label for="license_class">License Class *</label>
+                    <input type="text" id="license_class" name="license_class" placeholder="e.g. Technician, General, Amateur Extra" value="" required>
+                </div>
+                <div class="field">
+                    <label for="license_expires">License Expires</label>
+                    <input type="date" id="license_expires" name="license_expires" value="">
+                </div>
+                <div class="field">
+                    <label for="birthday">Birthday</label>
+                    <input type="date" id="birthday" name="birthday" value="">
+                </div>
+            </div>
+
+            <div class="field radio-group">
+                <span class="group-label">I am applying for membership type: *</span>
+                <label class="inline"><input type="radio" name="membership_type" value="Regular" required> Regular</label>
+                <label class="inline"><input type="radio" name="membership_type" value="Associate"> Associate</label>
+                <label class="inline"><input type="radio" name="membership_type" value="Student"> Student</label>
+            </div>
+
+            <div class="field checkbox-group">
+                <span class="group-label">I am a member of:</span>
+                <label class="inline"><input type="checkbox" id="arrl_member" name="arrl_member" value="1"> ARRL</label>
+                <label class="inline"><input type="checkbox" name="ares_member" value="1"> ARES</label>
+            </div>
+
+            <div class="form-row" id="arrl-expires-row">
+                <div class="field">
+                    <label for="arrl_expires">ARRL Membership Expires</label>
+                    <input type="text" id="arrl_expires" name="arrl_expires" placeholder="MM/YYYY" value="">
+                </div>
+            </div>
+
+            <div class="field radio-group">
+                <span class="group-label">Will you participate in club activities? *</span>
+                <label class="inline"><input type="radio" name="participate" value="Yes" required> Yes</label>
+                <label class="inline"><input type="radio" name="participate" value="No"> No</label>
+            </div>
+        </fieldset>
+
+        <fieldset>
+            <legend>Club Participation &amp; Interests</legend>
+            <div class="field">
+                <label for="interests">List your interests in Amateur Radio</label>
+                <textarea id="interests" name="interests" rows="3"></textarea>
+            </div>
+        </fieldset>
+
+        <fieldset>
+            <legend>Additional Family Members Who Are or Want to Be Members of TRARC</legend>
+            <div class="family-row">
+                <p class="family-row-label">Family member 1</p>
+                <div class="form-row four-col">
+                    <div class="field">
+                        <label for="family_1_name">Name</label>
+                        <input type="text" id="family_1_name" name="family[1][name]" value="">
+                    </div>
+                    <div class="field">
+                        <label for="family_1_callsign">Call Sign</label>
+                        <input type="text" id="family_1_callsign" name="family[1][callsign]" value="">
+                    </div>
+                    <div class="field">
+                        <label for="family_1_license_class">License Class</label>
+                        <input type="text" id="family_1_license_class" name="family[1][license_class]" value="">
+                    </div>
+                    <div class="field radio-group">
+                        <span class="group-label">ARRL Member</span>
+                        <label class="inline"><input type="radio" name="family[1][arrl]" value="Yes"> Yes</label>
+                        <label class="inline"><input type="radio" name="family[1][arrl]" value="No"> No</label>
+                    </div>
+                </div>
+            </div>
+            <div class="family-row">
+                <p class="family-row-label">Family member 2</p>
+                <div class="form-row four-col">
+                    <div class="field">
+                        <label for="family_2_name">Name</label>
+                        <input type="text" id="family_2_name" name="family[2][name]" value="">
+                    </div>
+                    <div class="field">
+                        <label for="family_2_callsign">Call Sign</label>
+                        <input type="text" id="family_2_callsign" name="family[2][callsign]" value="">
+                    </div>
+                    <div class="field">
+                        <label for="family_2_license_class">License Class</label>
+                        <input type="text" id="family_2_license_class" name="family[2][license_class]" value="">
+                    </div>
+                    <div class="field radio-group">
+                        <span class="group-label">ARRL Member</span>
+                        <label class="inline"><input type="radio" name="family[2][arrl]" value="Yes"> Yes</label>
+                        <label class="inline"><input type="radio" name="family[2][arrl]" value="No"> No</label>
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+
+        <fieldset>
+            <legend>Agreement / Signature</legend>
+
+            <p class="agreement-statement">
+                Applicant agrees to conduct themselves in accordance with the TRARC Constitution when
+                participating in any TRARC function, meeting, or sanctioned activity.
+            </p>
+
+            <div class="field checkbox-group">
+                <label class="inline">
+                    <input type="checkbox" name="agree" value="1" required>
+                    I agree to the statement above
+                </label>
+            </div>
+
+            <div class="field">
+                <label for="signature">Typed Signature (full legal name) *</label>
+                <input type="text" id="signature" name="signature" value="" required>
+                <p class="field-hint">The submission date and time will be recorded automatically.</p>
+            </div>
+
+            <p class="disclaimer-text">
+                The Officers and Members of TRARC will NOT assume parental responsibilities for any minor
+                member at any time. Therefore, all minors must be accompanied by their parent or guardian
+                while observing, attending, or participating in any TRARC function, meeting, or sanctioned
+                activity.
+            </p>
+
+            <div class="field radio-group">
+                <span class="group-label">Are you under 18? *</span>
+                <label class="inline"><input type="radio" id="under18_yes" name="under18" value="Yes" required> Yes</label>
+                <label class="inline"><input type="radio" id="under18_no" name="under18" value="No"> No</label>
+            </div>
+
+            <div class="form-row" id="parent-signature-row">
+                <div class="field">
+                    <label for="parent_signature">Parent/Guardian Typed Signature</label>
+                    <input type="text" id="parent_signature" name="parent_signature" value="">
+                    <p class="field-hint">Required if the applicant is under 18.</p>
+                </div>
+            </div>
+        </fieldset>
+
+        <div class="submit-row">
+            <button type="submit">Submit Application</button>
+        </div>
+    </form>
+
+    <footer class="page-footer">
+        <p>Questions about membership? Contact the TRARC board.</p>
+    </footer>
+</div>
+
+<script>
+(function () {
+    var arrlCheckbox = document.getElementById('arrl_member');
+    var arrlExpiresRow = document.getElementById('arrl-expires-row');
+    var under18Yes = document.getElementById('under18_yes');
+    var under18No = document.getElementById('under18_no');
+    var parentRow = document.getElementById('parent-signature-row');
+    var form = document.querySelector('form');
+
+    function refreshArrl() {
+        if (!arrlCheckbox || !arrlExpiresRow) { return; }
+        arrlExpiresRow.style.display = arrlCheckbox.checked ? '' : 'none';
+    }
+
+    function refreshUnder18() {
+        if (!parentRow) { return; }
+        parentRow.style.display = (under18Yes && under18Yes.checked) ? '' : 'none';
+    }
+
+    if (arrlCheckbox) {
+        arrlCheckbox.addEventListener('change', refreshArrl);
+        refreshArrl();
+    }
+    if (under18Yes && under18No) {
+        under18Yes.addEventListener('change', refreshUnder18);
+        under18No.addEventListener('change', refreshUnder18);
+        refreshUnder18();
+    }
+    if (form) {
+        form.addEventListener('submit', function () {
+            var btn = form.querySelector('button[type="submit"]');
+            if (btn) {
+                btn.disabled = true;
+                btn.textContent = 'Submitting…';
+            }
+        });
+    }
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,247 @@
+/* TRARC Membership Application - base styles. Mobile-first, no external dependencies. */
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background: #f4f5f7;
+    color: #1c2430;
+    line-height: 1.4;
+}
+
+.page {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 16px;
+}
+
+.page-header {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.page-header h1 {
+    font-size: 1.4rem;
+    margin: 0 0 4px;
+    color: #0b3d63;
+}
+
+.page-header h2 {
+    font-size: 1.1rem;
+    margin: 0 0 8px;
+    font-weight: 600;
+    color: #333;
+}
+
+.required-note {
+    font-size: 0.9rem;
+    color: #555;
+    margin: 0;
+}
+
+.form-level-error {
+    color: #b00020;
+    font-weight: 600;
+    margin-top: 8px;
+}
+
+fieldset {
+    background: #fff;
+    border: 1px solid #d7dbe0;
+    border-radius: 8px;
+    padding: 16px;
+    margin-bottom: 16px;
+}
+
+legend {
+    font-weight: 700;
+    padding: 0 8px;
+    color: #0b3d63;
+    font-size: 1rem;
+}
+
+.form-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 4px;
+}
+
+.form-row .field {
+    flex: 1 1 100%;
+}
+
+.two-col .field {
+    flex: 1 1 220px;
+}
+
+.three-col .field {
+    flex: 1 1 160px;
+}
+
+.four-col .field {
+    flex: 1 1 150px;
+}
+
+.field {
+    margin-bottom: 14px;
+}
+
+label {
+    display: block;
+    font-weight: 600;
+    font-size: 0.92rem;
+    margin-bottom: 4px;
+}
+
+label.inline {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-weight: 400;
+    margin-right: 16px;
+    margin-bottom: 6px;
+}
+
+input[type="text"],
+input[type="tel"],
+input[type="email"],
+input[type="date"],
+select,
+textarea {
+    width: 100%;
+    padding: 8px 10px;
+    border: 1px solid #b9c0c9;
+    border-radius: 6px;
+    font-size: 1rem;
+    background: #fff;
+}
+
+textarea {
+    resize: vertical;
+}
+
+.group-label {
+    display: block;
+    font-weight: 600;
+    font-size: 0.92rem;
+    margin-bottom: 6px;
+}
+
+.radio-group,
+.checkbox-group {
+    background: #f8fafc;
+    border: 1px solid #e1e6ec;
+    border-radius: 6px;
+    padding: 10px 12px;
+}
+
+.has-error input,
+.has-error textarea {
+    border-color: #b00020;
+    background: #fff5f5;
+}
+
+.field-error {
+    display: block;
+    color: #b00020;
+    font-size: 0.85rem;
+    margin-top: 4px;
+}
+
+.field-hint {
+    color: #666;
+    font-size: 0.82rem;
+    margin: 4px 0 0;
+}
+
+.family-row {
+    border-top: 1px dashed #d7dbe0;
+    padding-top: 12px;
+    margin-top: 12px;
+}
+
+.family-row:first-of-type {
+    border-top: none;
+    padding-top: 0;
+    margin-top: 0;
+}
+
+.family-row-label {
+    font-weight: 600;
+    color: #0b3d63;
+    margin: 0 0 8px;
+}
+
+.agreement-statement,
+.disclaimer-text {
+    background: #fff8e6;
+    border: 1px solid #f0dfa8;
+    border-radius: 6px;
+    padding: 10px 12px;
+    font-size: 0.9rem;
+}
+
+.disclaimer-text {
+    background: #fdecec;
+    border-color: #f0b8b8;
+}
+
+.hp-field {
+    position: absolute;
+    left: -9999px;
+    top: -9999px;
+    height: 0;
+    width: 0;
+    overflow: hidden;
+}
+
+.submit-row {
+    text-align: center;
+    margin-top: 20px;
+}
+
+button[type="submit"] {
+    background: #0b3d63;
+    color: #fff;
+    border: none;
+    padding: 12px 28px;
+    border-radius: 6px;
+    font-size: 1.05rem;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+button[type="submit"]:hover {
+    background: #0a2f4d;
+}
+
+.message-box {
+    background: #fff;
+    border: 1px solid #d7dbe0;
+    border-radius: 8px;
+    padding: 24px;
+    text-align: center;
+}
+
+.message-box h2 {
+    color: #0b3d63;
+    margin-top: 0;
+}
+
+.page-footer {
+    text-align: center;
+    font-size: 0.85rem;
+    color: #777;
+    margin-top: 24px;
+}
+
+@media (min-width: 600px) {
+    .page {
+        padding: 32px 16px;
+    }
+}
